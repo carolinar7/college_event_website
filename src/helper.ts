@@ -1,0 +1,1 @@
+export const url = (process.env.NODE_ENV === 'production') ? 'https://college-event-website.vercel.app/api/' : 'http://localhost:3000/api/';

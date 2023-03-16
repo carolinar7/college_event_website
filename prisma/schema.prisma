@@ -10,11 +10,19 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum Role {
+    SUPERADMIN
+    ADMIN
+    STUDENT
+}
+
 model User {
     id            String    @id @default(cuid())
     email         String    @unique
     fName         String
     lName         String
     password      String
-    permission    String
+    role          Role      @default(STUDENT)
+
+    @@index([email])
 }

@@ -24,7 +24,7 @@ const SignUp = () => {
     }).then(async () => {
       await router.push('/auth/signin');
     }).catch(() => 
-      setError('Email is already in use')
+      setError('There was an issue during sign up')
     );
   };
 

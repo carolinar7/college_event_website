@@ -1,5 +1,6 @@
 import { signIn } from "next-auth/react"
 import Link from "next/link";
+import router from "next/router";
 import { type FormEvent, useState } from "react";
 import { IoArrowBackOutline } from 'react-icons/io5'
 
@@ -18,7 +19,7 @@ const SignIn = () => {
     })
 
     if (signedIn?.ok) {
-      alert('Signed IN!!!')
+      await router.push('/views/events');
     } else {
       setError('Could not login with credentials');
     }

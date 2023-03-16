@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '../../server/db' 
-
-// TODO: add jwt verification
+import { prisma } from '../../server/db'
+import bcrypt from 'bcryptjs';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method;
@@ -45,13 +44,11 @@ const createUser = async (body: PostUser, res: NextApiResponse) => {
     const user = await prisma.user.create({
       data: {
         email: body.email,
-        password: body.password,
+        password: bcrypt.hashSync(body.password, 8),
         fName: body.fName,
         lName: body.lName,
-        permission: 'student'
       }
     });
-    console.log('succ')
     res.status(200).json(user);
   } catch (e) {
     res.status(400).json({});

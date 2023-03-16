@@ -11,6 +11,8 @@ const Home: NextPage = () => {
   };
 
   const onClick = () => {
+    console.log(status);
+    alert(status);
     if (status === 'authenticated') {
       redirectToEvents().catch(() => {return;});
     } else {

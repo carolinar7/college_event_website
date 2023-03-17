@@ -7,7 +7,7 @@ const Home: NextPage = () => {
   const { status } = useSession();
   
   const redirectToEvents = async () => {
-    await router.push('/views/events');
+    await router.push('/views/event');
   };
 
   const onClick = () => {

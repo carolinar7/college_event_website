@@ -19,7 +19,7 @@ const SignIn = () => {
     })
 
     if (signedIn?.ok) {
-      await router.push('/views/events');
+      await router.push('/views/event');
     } else {
       setError('Could not login with credentials');
     }

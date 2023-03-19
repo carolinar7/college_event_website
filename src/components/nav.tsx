@@ -7,11 +7,11 @@ const Nav = () => {
 
   return (
     <div className='h-16 bg-rose-500'>
-      <ul className='flex h-full items-center justify-end text-white'>
+      <ul className='flex h-full items-center justify-end text-white p-5'>
         {
           (session?.user.role === Role.SUPERADMIN) ? (
             <li className='mx-5'>
-              <Link href='/admin/university'>Universities</Link>
+              <Link href='/admin/admin_dashboard/university'>Admin Dashboard</Link>
             </li>
           ) : null
         }

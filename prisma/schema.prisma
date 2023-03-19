@@ -26,3 +26,12 @@ model User {
 
     @@index([email])
 }
+
+model University {
+    id  String @id @default(uuid())
+    name String
+    location String
+    description String
+    numStudents Int
+    emailDomain String
+}

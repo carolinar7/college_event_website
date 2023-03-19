@@ -7,11 +7,13 @@ import { IoArrowBackOutline } from 'react-icons/io5'
 const SignIn = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [disableButton, setDisableButton] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setDisableButton(true);
+    
     const signedIn = await signIn('credentials', {
       username: username,
       password: password,
@@ -22,6 +24,7 @@ const SignIn = () => {
       await router.push('/views/event');
     } else {
       setError('Could not login with credentials');
+      setDisableButton(false);
     }
   };
 
@@ -41,7 +44,14 @@ const SignIn = () => {
           </label>
           <input className='border-b-2 border-rose-500 mb-5' name="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
           <div className="flex flex-1 flex-row justify-center">
-            <button className='bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg mb-3' type="submit">Sign In</button>
+            <button 
+              className='bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg mb-3' 
+              type="submit"
+              disabled={disableButton}
+              style={(disableButton) ? {opacity: .75} : undefined}
+            >
+              Sign In
+            </button>
           </div>
         </form>
         <p className="h-5 mb-3">

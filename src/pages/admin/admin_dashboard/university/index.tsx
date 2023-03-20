@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import SidePanel from "~/components/admin_dashboard/side_panel";
 import CreateUniversity from "~/components/admin_dashboard/university/create_university";
 import UniversityListItem from "~/components/admin_dashboard/university/university_list_item";
-import Nav from "~/components/nav";
+import Nav from "~/components/common/nav";
 import { url } from "~/helper";
 
 const Universities = () => {

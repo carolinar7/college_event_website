@@ -6,7 +6,7 @@ import { type FormEvent, useEffect, useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import SidePanel from "~/components/admin_dashboard/side_panel";
 import Button from "~/components/common/button";
-import Nav from "~/components/nav";
+import Nav from "~/components/common/nav";
 import { url } from "~/helper";
 
 const University = () => {

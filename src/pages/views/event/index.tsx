@@ -1,4 +1,4 @@
-import Nav from "~/components/nav";
+import Nav from "~/components/common/nav";
 
 const Events = () => {
   return <Nav />;

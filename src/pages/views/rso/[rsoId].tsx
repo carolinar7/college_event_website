@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import Nav from "~/components/nav";
+import Nav from "~/components/common/nav";
 
 const RSO = () => {
   const router = useRouter();

@@ -1,6 +1,6 @@
 import RSORequestListItem from "~/components/admin_dashboard/rso_request.tsx/rso_request_list_item";
 import SidePanel from "~/components/admin_dashboard/side_panel";
-import Nav from "~/components/nav";
+import Nav from "~/components/common/nav";
 
 const MockData = Array(10).fill({
   name: 'Society of Hispanic Professional Engineers',

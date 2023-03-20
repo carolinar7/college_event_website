@@ -1,6 +1,6 @@
 import PublicEventRequestListItem from "~/components/admin_dashboard/public_event_request/public_event_request_item";
 import SidePanel from "~/components/admin_dashboard/side_panel";
-import Nav from "~/components/nav";
+import Nav from "~/components/common/nav";
 
 const MockData = Array(10).fill({
   name: 'Resume Review',

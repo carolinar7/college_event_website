@@ -1,6 +1,6 @@
 import { type University } from "@prisma/client";
 import axios from "axios";
-import { type FormEvent, useState, type SetStateAction, type Dispatch } from "react";
+import { type FormEvent, useState, type SetStateAction, type Dispatch, useEffect } from "react";
 import { url } from "~/helper";
 
 interface CreateUniversityProps {
@@ -12,7 +12,7 @@ const CreateUniversity = ({ setShowPanel, universities }: CreateUniversityProps)
   const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [numStudents, setNumStudents] = useState<number>(0);
+  const [numStudents, setNumStudents] = useState<number | undefined>(undefined);
   const [emailDomain, setEamilDomain] = useState<string>('');
   const [disableButton, setDisableButton] = useState<boolean>(false);
   

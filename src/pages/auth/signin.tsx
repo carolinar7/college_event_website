@@ -3,6 +3,7 @@ import Link from "next/link";
 import router from "next/router";
 import { type FormEvent, useState } from "react";
 import { IoArrowBackOutline } from 'react-icons/io5'
+import Button from "~/components/common/button";
 
 const SignIn = () => {
   const [username, setUsername] = useState<string>('');
@@ -38,20 +39,13 @@ const SignIn = () => {
           <label className="text-rose-500 text-lg">
             Email
           </label>
-          <input className='border-b-2 border-rose-500' name="username" type="text" onChange={(e) => setUsername(e.target.value)}/>
+          <input className='border-b-2 border-rose-500' name="username" type="text" onChange={(e) => setUsername(e.target.value)} required />
           <label className='text-rose-500 text-lg mt-5'>
             Password
           </label>
-          <input className='border-b-2 border-rose-500 mb-5' name="password" type="password" onChange={(e) => setPassword(e.target.value)}/>
+          <input className='border-b-2 border-rose-500 mb-5' name="password" type="password" onChange={(e) => setPassword(e.target.value)} required />
           <div className="flex flex-1 flex-row justify-center">
-            <button 
-              className='bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg mb-3' 
-              type="submit"
-              disabled={disableButton}
-              style={(disableButton) ? {opacity: .75} : undefined}
-            >
-              Sign In
-            </button>
+            <Button className='mb-3' type='submit' disabled={disableButton} style={(disableButton) ? {opacity: .75} : undefined} value='Sign In' />
           </div>
         </form>
         <p className="h-5 mb-3">

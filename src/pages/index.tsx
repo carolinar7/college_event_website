@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import router from "next/router";
 import Logo from "~/assets/Logo";
+import Button from "~/components/common/button";
 
 const Home: NextPage = () => {
   const { status } = useSession();
@@ -24,9 +25,7 @@ const Home: NextPage = () => {
       <p className="text-8xl mt-10 mb-6 font-semibold text-rose-500 text-center">
         College Events
       </p>
-      <button className='bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg' onClick={onClick}>
-        Start
-      </button>
+      <Button className="!shadow-rose-700" onClick={onClick} value='Start'/>
     </div>
   );
 };

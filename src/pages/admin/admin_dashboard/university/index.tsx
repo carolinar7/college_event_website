@@ -21,7 +21,7 @@ const Universities = () => {
           return <UniversityListItem item={item} key={item.id}/>
         })}
         <button
-          className='flex fixed shadow-lg bottom-10 right-10 items-center justify-center h-16 w-16 rounded-full bg-rose-500'
+          className='flex fixed shadow-lg shadow-gray-500 bottom-10 right-10 items-center justify-center h-16 w-16 rounded-full bg-rose-500'
           onClick={() => {setShowPanel(true)}}
         >
           <IoAdd color='white' size={25}/>

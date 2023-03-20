@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { type FormEvent, useEffect, useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import SidePanel from "~/components/admin_dashboard/side_panel";
+import Button from "~/components/common/button";
 import Nav from "~/components/nav";
 import { url } from "~/helper";
 
@@ -68,19 +69,8 @@ const University = () => {
             <label className='text-xl font-bold mb-3'>Email Domain</label>
             <input className='border-b-2 border-rose-500' type="string" placeholder='knights.ucf.edu' name="emailDomain" value={emailDomain} onChange={(e) => setEamilDomain(e.target.value)} required/>
             <div className='flex'>
-              <button
-                className='bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg mb-3 mr-5'
-                type="submit"
-                style={(disableButton) ? {opacity: .75} : undefined}
-              >
-                Save
-              </button>
-              <button
-                className='bg-red-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg mb-3'
-                onClick={() => {onDeleteUniversity().catch(() => {return})}}
-              >
-                Delete
-              </button>
+              <Button className='mb-3 mr-5' value='Save' type='submit' style={(disableButton) ? {opacity: .75} : undefined}/>
+              <Button className='!bg-red-500 mb-3' value='Delete' onClick={() => {onDeleteUniversity().catch(() => {return})}}/>
             </div>
           </form>
         </div>

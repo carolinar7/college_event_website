@@ -37,6 +37,6 @@ const UniversityListItem = (props: UniListProps) => {
       </div>
     </Link>
   )
-}
+};
 
 export default UniversityListItem;

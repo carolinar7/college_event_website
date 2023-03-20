@@ -4,6 +4,7 @@ import { type FormEvent, useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { useRouter } from "next/router";
 import { url } from "~/helper";
+import Button from "~/components/common/button";
 
 const SignUp = () => {
   const [fName, setFName] = useState<string>('');
@@ -52,7 +53,7 @@ const SignUp = () => {
           </label>
           <input className='border-b-2 border-rose-500' name="password" type="password" onChange={(e) => setPassword(e.target.value)} required/>
           <div className='flex justify-center mt-5'>
-            <button className='bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg mb-3' type="submit">Sign Up</button>
+            <Button className='mb-3' type='submit' value='Sign Up' />
           </div>
         </form>
         <p className="h-5 mb-3">

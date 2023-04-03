@@ -17,7 +17,7 @@ const University = () => {
   const [location, setLocation] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [numStudents, setNumStudents] = useState<number>(0);
-  const [emailDomain, setEamilDomain] = useState<string>('');
+  const [emailDomain, setEmailDomain] = useState<string>('');
   const [disableButton, setDisableButton] = useState<boolean>(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const University = () => {
       setLocation(data.location);
       setDescription(data.description);
       setNumStudents(data.numStudents);
-      setEamilDomain(data.emailDomain);
+      setEmailDomain(data.emailDomain);
     }).catch(() => {return;});
   }, [universityId])
 
@@ -67,7 +67,7 @@ const University = () => {
             <label className='text-xl font-bold mb-3'>Number of Students</label>
             <input className='border-b-2 border-rose-500 mb-3' type="number" name="numStudents" value={numStudents} onChange={(e) => setNumStudents(e.target.valueAsNumber)} required/>
             <label className='text-xl font-bold mb-3'>Email Domain</label>
-            <input className='border-b-2 border-rose-500' type="string" placeholder='knights.ucf.edu' name="emailDomain" value={emailDomain} onChange={(e) => setEamilDomain(e.target.value)} required/>
+            <input className='border-b-2 border-rose-500' type="string" placeholder='knights.ucf.edu' name="emailDomain" value={emailDomain} onChange={(e) => setEmailDomain(e.target.value)} required/>
             <div className='flex'>
               <Button className='mb-3 mr-5' value='Save' type='submit' style={(disableButton) ? {opacity: .75} : undefined}/>
               <Button className='!bg-red-500 mb-3' value='Delete' onClick={() => {onDeleteUniversity().catch(() => {return})}}/>

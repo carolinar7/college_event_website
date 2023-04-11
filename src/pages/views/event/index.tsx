@@ -51,13 +51,37 @@ export interface EventType {
   id?: string
 }
 
+const fakeData = Array (10).fill({
+    title: "Music Festival",
+    location: "Central Park",
+    starts: "Tue, 11 Apr 2023 18:00:00 -0400",
+    ends: "Tue, 11 Apr 2023 19:00:00 -0400",
+    description: "A weekend of live music in the heart of the city.",
+    location_url: "https://example.com/music-festival",
+    contact_name: "Jane Smith",
+    contact_email: "jane.smith@example.com",
+    id: "123"
+})
+
 function Events() {
   const [events, setEvents] = useState<Array<EventType>>([]);
+
+  function sortByStartDate(events: EventType[]) {
+    return events.sort((a, b) => {
+      const aTime = new Date(a.starts).getTime();
+      const bTime = new Date(b.starts).getTime();
+      return aTime - bTime;
+    });
+  }
+  
 
   useEffect(() => {
     axios.get('https://events.ucf.edu/upcoming/feed.json')
       .then((response: {data: Array<EventType>}) => {
-        setEvents(response.data);
+        const eventsTotal = [...response.data, ...fakeData];
+        sortByStartDate(eventsTotal);
+        console.log(eventsTotal);
+        setEvents(eventsTotal);
       })
       .catch(error => {
         console.log(error);

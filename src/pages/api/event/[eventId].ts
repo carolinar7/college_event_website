@@ -8,7 +8,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   const event = await prisma.event.findUnique({
     where: {
       id: eventId as string,
-    },
+    }
   })
-  res.status(200).json(event)
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: event?.hostId as string,
+    }
+  })
+
+  res.status(200).json({...event, ...user})
 }

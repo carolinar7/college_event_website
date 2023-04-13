@@ -10,25 +10,13 @@ import Image from "next/image";
 import Comments from "~/components/comments";
 import { url } from "~/helper";
 
-const EmptyEvent = {
-  id: '',
-  contact_email: '',
-  contact_name: '',
-  description: '',
-  ends: '',
-  location: '',
-  location_url: '',
-  starts: '',
-  title: '',
-} as EventType;
-
 const Event = () => {
   const router = useRouter();
   const eventID = router.query?.eventId as string;
   const title = router.query?.title as string;
   const ucf = router.query?.ucf;
 
-  const [events, setEvents] = useState<EventType>(EmptyEvent);
+  const [events, setEvents] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -48,7 +36,9 @@ const Event = () => {
         const formattedData = {
           ...data,
           starts: new Date(data.starts).toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }),
-          ends: new Date(data.ends).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+          ends: new Date(data.ends).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
+          contact_name: data.fName + " " + data.lName,
+          contact_email: data.email,
         };
         setEvents(formattedData);
         setLoading(false);

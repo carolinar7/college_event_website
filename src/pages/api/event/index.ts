@@ -77,6 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       tags: body.tags,
       eventType: body.eventType.toUpperCase(),
       eventStatus: (body.eventType === "public") ? EventStatus.PENDING : EventStatus.APPROVED,
+      location: body.location,
       location_url: location_url,
       User: {
         connect: {

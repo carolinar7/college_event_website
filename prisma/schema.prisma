@@ -86,6 +86,7 @@ model Event {
   ends     String
   eventType   EventType
   eventStatus EventStatus
+  location String
   location_url    String
   hostId      String
   rsoId       String?

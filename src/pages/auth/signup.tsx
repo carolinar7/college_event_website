@@ -24,8 +24,9 @@ const SignUp = () => {
       lName: lName,
     }).then(async () => {
       await router.push('/auth/signin');
-    }).catch(() => 
-      setError('There was an issue during sign up')
+    }).catch((e) => {
+      setError(e.response.data.error)
+    }
     );
   };
 

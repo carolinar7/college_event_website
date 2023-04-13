@@ -2,6 +2,10 @@ import Nav from "~/components/nav";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from "next/link";
+import Button from "~/components/common/button";
+import { useSession } from "next-auth/react";
+import CreateEvent from "~/components/events/create_event";
+import { url } from "~/helper";
 
 function formatDate(timeStr: string) {
   const months = [
@@ -64,37 +68,48 @@ const fakeData = Array (10).fill({
 })
 
 function Events() {
+  const { data } = useSession();
   const [events, setEvents] = useState<Array<EventType>>([]);
+  const [showPanel, setShowPanel] = useState<boolean>(false);
 
   function sortByStartDate(events: EventType[]) {
     return events.sort((a, b) => {
       const aTime = new Date(a.starts).getTime();
       const bTime = new Date(b.starts).getTime();
-      return aTime - bTime;
+      return bTime - aTime;
     });
   }
-  
 
   useEffect(() => {
+    if (!data?.user) return;
     axios.get('https://events.ucf.edu/upcoming/feed.json')
       .then((response: {data: Array<EventType>}) => {
-        const eventsTotal = [...response.data, ...fakeData];
-        sortByStartDate(eventsTotal);
-        console.log(eventsTotal);
-        setEvents(eventsTotal);
+        axios.get(`${url}/event?userId=${data?.user.id}`).then((response2: {data: Array<EventType>}) => {
+          const eventsTotal = [...response.data, ...response2.data];
+          sortByStartDate(eventsTotal);
+          setEvents(eventsTotal);
+        })
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
+  }, [data]);
 
   function formatString(str: string) {
     return str.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-');
   }
 
+  function isAdmin() {
+    return data?.user?.role === 'ADMIN' || data?.user?.role === 'SUPERADMIN';
+  }
+
   return (
     <div>
       <Nav />
+      <div className="flex my-3 mx-5 items-center justify-between">
+        <h1 className="text-4xl font-bold text-rose-500 underline">Events</h1>
+        {isAdmin() && <Button className="p-0 mt-0 w-32 h-12" value="Create Event" onClick={() => setShowPanel(!showPanel)}/>}
+      </div>
       <ul>
         {events.map((event: EventType, index: number) => {
           const formatedTitle = formatString(event.title);
@@ -105,6 +120,17 @@ function Events() {
           )}
         )}
       </ul>
+      <div
+          className="fixed h-screen w-screen top-0 left-0 bg-black opacity-30"
+          style={{display: (showPanel) ? undefined : 'none'}}
+          onClick={() => {setShowPanel(false)}}
+      />
+      <div
+        className="fixed top-36 left-1/4 w-1/2 bg-white rounded-xl p-10"
+        style={{display: (showPanel) ? undefined : 'none'}}
+      >
+        <CreateEvent setShowPanel={setShowPanel} />
+      </div>
     </div>
   );
 }

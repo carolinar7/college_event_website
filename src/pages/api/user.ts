@@ -39,8 +39,28 @@ export type PostUser = {
   lName: string,
 }
 
+const getEmailDomain = (email: string) => {
+  const emailDomain = email.split('@')[1];
+  return emailDomain;
+};
+
 const createUser = async (body: PostUser, res: NextApiResponse) => {
   try {
+    const emailDomain = getEmailDomain(body.email);
+
+    console.log(emailDomain);
+
+    const university = await prisma.university.findUnique({
+      where: {
+        emailDomain: emailDomain,
+      }
+    });
+
+    if (!university) {
+      res.status(400).json({error: 'University with domain is not currently supported'});
+      return;
+    }
+
     const user = await prisma.user.create({
       data: {
         email: body.email,
@@ -51,6 +71,6 @@ const createUser = async (body: PostUser, res: NextApiResponse) => {
     });
     res.status(200).json(user);
   } catch (e) {
-    res.status(400).json({});
+    res.status(400).json({error: "There was an issue during sign up"});
   }
 }

@@ -1,34 +1,28 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { FaStar } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 
 interface Comment {
   id: number;
   body: string;
   rating: number;
+  date: string;
 }
 
 function Comments() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [inputHeight, setInputHeight] = useState(40);
 
-  function fetchComments() {
-    axios
-      .get("https://jsonplaceholder.typicode.com/comments")
-      .then((response) => {
-        setComments(response.data.slice(0, 10));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setInputValue(event.target.value);
+    setInputHeight(event.target.scrollHeight);
   }
 
-  function handleRatingChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setRating(parseInt(event.target.value));
+  function handleRatingClick(ratingValue: number) {
+    setRating(ratingValue);
   }
 
   function handleAddComment() {
@@ -36,45 +30,70 @@ function Comments() {
       id: comments.length + 1,
       body: inputValue,
       rating: rating,
+      date: new Date().toLocaleString()
     };
     setComments([newComment, ...comments]);
     setInputValue("");
-    setRating(1);
+    setRating(0);
+    setInputHeight(40);
   }
 
+  const containerStyle = {
+    minHeight: "300px",
+    maxHeight: "600px",
+    overflowY: "auto"
+  };
+
   return (
-    <div>
-      <button onClick={fetchComments}>Fetch comments</button>
+    <div style={containerStyle}>
       <ul>
         {comments.map((comment) => (
           <li key={comment.id}>
-            <p>{comment.body}</p>
-            <p>Rating: {comment.rating}</p>
+            <div className="border rounded-md p-4 flex items-start flex-col">
+              <div className="flex items-center mb-2">
+                <div className="mr-4">
+                  <CgProfile size={30} />
+                </div>
+                <p>{comment.body}</p>
+              </div>
+              <div className="flex justify-between w-full text-gray-500 text-sm">
+                <div>Rating: {comment.rating}</div>
+                <div>{comment.date}</div>
+              </div>
+            </div>
           </li>
         ))}
       </ul>
-      <div>
-        <label htmlFor="comment-input">Leave a comment:</label>
-        <input
-          type="text"
-          id="comment-input"
+      <div className="py-2" style={{ display: "flex" }}>
+        {[...Array(5)].map((_, index) => {
+          const ratingValue = index + 1;
+          return (
+            <FaStar
+              key={ratingValue}
+              className="star"
+              size={30}
+              color={ratingValue <= rating ? "#ffc107" : "#e4e5e9"}
+              onClick={() => handleRatingClick(ratingValue)}
+              style={{ marginRight: "10px", cursor: "pointer" }}
+            />
+          );
+        })}
+      </div>
+      <div className="flex border rounded-md overflow-hidden">
+        <textarea
+          className="flex-1 p-2 outline-none resize-none"
+          placeholder="Add a comment..."
           value={inputValue}
           onChange={handleInputChange}
+          style={{ height: inputHeight }}
         />
+        <button
+          className="bg-rose-500 text-white px-4 py-2"
+          onClick={handleAddComment}
+        >
+          Post
+        </button>
       </div>
-      <div>
-        <label htmlFor="rating-select">Rating:</label>
-        <input
-          type="range"
-          id="rating-select"
-          min="1"
-          max="5"
-          value={rating}
-          onChange={handleRatingChange}
-        />
-        <span>{rating}</span>
-      </div>
-      <button onClick={handleAddComment}>Add comment</button>
     </div>
   );
 }

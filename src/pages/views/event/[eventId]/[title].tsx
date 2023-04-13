@@ -86,7 +86,9 @@ const Event = () => {
                 <p className="text-xl mr-2"><IoMail /></p>
                 <p>{events.contact_email}</p>
               </div>
-              <Comments/>
+              <div className="border-b border-gray-400"></div>
+              <p className="pt-2 text-2xl font-bold">Comments:</p>  
+              <p className="py-2"><Comments/></p>
             </div>
           </div>
         </div>

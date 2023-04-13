@@ -8,6 +8,7 @@ import { EventType } from "..";
 import loadingGif from '../../../../assets/loadingGif.gif';
 import Image from "next/image";
 import Comments from "~/components/comments";
+import { url } from "~/helper";
 
 const EmptyEvent = {
   id: '',
@@ -25,22 +26,35 @@ const Event = () => {
   const router = useRouter();
   const eventID = router.query?.eventId as string;
   const title = router.query?.title as string;
+  const ucf = router.query?.ucf;
 
   const [events, setEvents] = useState<EventType>(EmptyEvent);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!eventID) return;
-    axios.get(`https://events.ucf.edu/event/${eventID}/${title}/feed.json`).then(({ data }) => {
-      const formattedData = {
-        ...data,
-        starts: new Date(data.starts).toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }),
-        ends: new Date(data.ends).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-      };
-      setEvents(formattedData);
-      setLoading(false);
-    }).catch(() => {return;});
-  }, [eventID])
+    if (ucf === 'true') {
+      axios.get(`https://events.ucf.edu/event/${eventID}/${title}/feed.json`).then(({ data }) => {
+        const formattedData = {
+          ...data,
+          starts: new Date(data.starts).toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }),
+          ends: new Date(data.ends).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+        };
+        setEvents(formattedData);
+        setLoading(false);
+      }).catch(() => {return;});
+    } else {
+      axios.get(`${url}/event/${eventID}`).then(({ data }) => {
+        const formattedData = {
+          ...data,
+          starts: new Date(data.starts).toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }),
+          ends: new Date(data.ends).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+        };
+        setEvents(formattedData);
+        setLoading(false);
+      }).catch(() => {return;});
+    }
+  }, [eventID, ucf])
 
   if (loading) {
     return (
@@ -86,9 +100,13 @@ const Event = () => {
                 <p className="text-xl mr-2"><IoMail /></p>
                 <p>{events.contact_email}</p>
               </div>
-              <div className="border-b border-gray-400"></div>
-              <p className="pt-2 text-2xl font-bold">Comments:</p>  
-              <p className="py-2"><Comments/></p>
+              {(!ucf) && 
+                <div>
+                  <div className="border-b border-gray-400"></div>
+                  <p className="pt-2 text-2xl font-bold">Comments:</p>
+                  <p className="py-2"><Comments/></p>
+                </div>
+              }
             </div>
           </div>
         </div>

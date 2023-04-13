@@ -41,7 +41,6 @@ function Comments() {
   const containerStyle = {
     minHeight: "300px",
     maxHeight: "600px",
-    overflowY: "auto"
   };
 
   return (

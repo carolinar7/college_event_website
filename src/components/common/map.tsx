@@ -4,6 +4,32 @@ interface MapProps {
     location_url: string
 }
 
+const extractLongLat = (url: string) => {
+    // Extract latitude and longitude values from URL
+    const latLngRegex = /@([-0-9.]+),([-0-9.]+),/i;
+    let matches = url.match(latLngRegex);
+
+    let lat: string | undefined;
+    let lng: string | undefined;
+
+    if (matches && matches.length >= 2) {
+        lat = matches[1];
+        lng = matches[2];
+    }
+
+    if (!lat || !lng) {
+        matches = url.match(/query=(-?\d+\.\d+),(-?\d+\.\d+)/);
+        if (matches) {
+            lat = matches[1];
+            lng = matches[2];
+        };
+    }
+
+    if (!lat || !lng) return null;
+
+    return { lat, lng };
+}
+
 const Map = (props: MapProps) => {
 
     const url = props.location_url;
@@ -11,20 +37,11 @@ const Map = (props: MapProps) => {
     if (!props.location_url)
         return <></>
 
-    console.log(url)
+    const latLong = extractLongLat(props.location_url);
 
-    // Extract latitude and longitude values from URL
-    const latLngRegex = /@([-0-9.]+),([-0-9.]+),/i;
-    const matches = url.match(latLngRegex);
+    if (!latLong) return <></>;
 
-    if (!matches || matches.length < 2) return <></>;
-
-    const lat = matches[1];
-    const lng = matches[2];
-
-    if (!lat || !lng) return <></>;
-
-    const mapLink: string = `https://www.google.com/maps/embed/v1/place?key=${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${lat},${lng}`;
+    const mapLink: string = `https://www.google.com/maps/embed/v1/place?key=${env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${latLong.lat},${latLong.lng}`;
 
     return (
         <iframe className="mt-6" 

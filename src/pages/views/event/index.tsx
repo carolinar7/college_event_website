@@ -55,18 +55,6 @@ export interface EventType {
   id?: string
 }
 
-const fakeData = Array (10).fill({
-    title: "Music Festival",
-    location: "Central Park",
-    starts: "Tue, 11 Apr 2023 18:00:00 -0400",
-    ends: "Tue, 11 Apr 2023 19:00:00 -0400",
-    description: "A weekend of live music in the heart of the city.",
-    location_url: "https://example.com/music-festival",
-    contact_name: "Jane Smith",
-    contact_email: "jane.smith@example.com",
-    id: "123"
-})
-
 function Events() {
   const { data } = useSession();
   const [events, setEvents] = useState<Array<EventType>>([]);
@@ -114,7 +102,7 @@ function Events() {
         {events.map((event: EventType, index: number) => {
           const formatedTitle = formatString(event.title);
           return (
-            <Link key={index} href={`/views/event/${event.id}/${formatedTitle}`}>
+            <Link key={index} href={`/views/event/${event.id}/${formatedTitle}${(event.location) ? `?ucf=true` : ''}`}>
               <EventItem events={event} />
             </Link>
           )}

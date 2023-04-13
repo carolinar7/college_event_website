@@ -30,8 +30,7 @@ const Universities = () => {
           className="fixed h-screen w-screen top-0 left-0 bg-black opacity-30"
           style={{display: (showPanel) ? undefined : 'none'}}
           onClick={() => {setShowPanel(false)}}
-        >
-        </div>
+        />
         <div
           className="fixed top-36 left-1/4 w-1/2 bg-white rounded-xl p-10"
           style={{display: (showPanel) ? undefined : 'none'}}

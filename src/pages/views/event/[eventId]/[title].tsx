@@ -7,6 +7,7 @@ import Nav from "~/components/nav";
 import { EventType } from "..";
 import loadingGif from '../../../../assets/loadingGif.gif';
 import Image from "next/image";
+import Comments from "~/components/comments";
 
 const EmptyEvent = {
   id: '',
@@ -85,6 +86,7 @@ const Event = () => {
                 <p className="text-xl mr-2"><IoMail /></p>
                 <p>{events.contact_email}</p>
               </div>
+              <Comments/>
             </div>
           </div>
         </div>

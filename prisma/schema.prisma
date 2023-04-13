@@ -1,37 +1,99 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
-    SUPERADMIN
-    ADMIN
-    STUDENT
+  SUPERADMIN
+  ADMIN
+  STUDENT
 }
 
 model User {
-    id            String    @id @default(cuid())
-    email         String    @unique
-    fName         String
-    lName         String
-    password      String
-    role          Role      @default(STUDENT)
+  id         String       @id @default(cuid())
+  email      String       @unique
+  fName      String
+  lName      String
+  password   String
+  role       Role         @default(STUDENT)
+  RSO        RSO[]
+  RSOMembers RSOMembers[]
+  Event      Event[]
 
-    @@index([email])
+  @@index([email])
 }
 
 model University {
-    id  String @id @default(uuid())
-    name String
-    location String
-    description String
-    numStudents Int
-    emailDomain String
+  id          String @id @default(uuid())
+  name        String
+  location    String
+  description String
+  numStudents Int
+  emailDomain String @unique
+  rso         RSO[]
+  event       Event[]
+
+  @@index([emailDomain], map: "University_emailDomain_fkey")
+}
+
+model RSO {
+  id          String       @id
+  name        String
+  description String
+  adminId     String
+  rsoMemberId String
+  universityId String
+  University  University   @relation(fields: [universityId], references: [id])
+  User        User         @relation(fields: [adminId], references: [id])
+  RSOMembers  RSOMembers[]
+  Event       Event[]
+
+  @@index([adminId], map: "RSO_adminId_fkey")
+}
+
+model RSOMembers {
+  id       String @id
+  memberId String
+  rsoID    String
+  User     User   @relation(fields: [memberId], references: [id])
+  RSO      RSO    @relation(fields: [rsoID], references: [id])
+
+  @@index([rsoID], map: "RSOMembers_rsoID_fkey")
+}
+
+enum EventType {
+  PUBLIC
+  PRIVATE
+  RSO
+}
+
+enum EventStatus {
+  PENDING
+  APPROVED
+  DENIED
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  tags        String
+  title        String
+  description String
+  starts   String
+  ends     String
+  eventType   EventType
+  eventStatus EventStatus
+  location_url    String
+  hostId      String
+  rsoId       String?
+  universityId String
+  University  University   @relation(fields: [universityId], references: [id])
+  User        User     @relation(fields: [hostId], references: [id])
+  RSO         RSO?      @relation(fields: [rsoId], references: [id])
+
+  @@index([eventType, eventStatus], map: "Event_eventType_eventStatus_fkey")
+  @@index([rsoId], map: "Event_rsoId_fkey")
 }

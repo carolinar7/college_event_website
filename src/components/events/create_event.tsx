@@ -48,7 +48,11 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
       tags,
       rsoId: eventType === 'rso' ? rsoId : undefined,
     }).then(({ data }: { data: Event }) => {
-      alert(`Event ${data.title} was created!`);
+      if (eventType === 'public') {
+        alert(`Event ${data.title} was sent for approval!`);
+      } else {
+        alert(`Event ${data.title} was created!`);
+      }
     });
 
     setShowPanel(false);

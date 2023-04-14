@@ -53,19 +53,8 @@ export interface EventType {
   contact_name: string,
   contact_email: string,
   id?: string
+  ucfevent?: boolean
 }
-
-const fakeData = Array (10).fill({
-    title: "Music Festival",
-    location: "Central Park",
-    starts: "Tue, 11 Apr 2023 18:00:00 -0400",
-    ends: "Tue, 11 Apr 2023 19:00:00 -0400",
-    description: "A weekend of live music in the heart of the city.",
-    location_url: "https://example.com/music-festival",
-    contact_name: "Jane Smith",
-    contact_email: "jane.smith@example.com",
-    id: "123"
-})
 
 function Events() {
   const { data } = useSession();
@@ -84,7 +73,10 @@ function Events() {
     if (!data?.user) return;
     axios.get('https://events.ucf.edu/upcoming/feed.json')
       .then((response: {data: Array<EventType>}) => {
-        axios.get(`${url}/event?userId=${data?.user.id}`).then((response2: {data: Array<EventType>}) => {
+        for (let i = 0; i < response.data.length; i++) {
+          response.data[i] = {...response.data[i] as EventType, ucfevent: true};
+        }
+        axios.get(`${url}/event?userId=${data?.user.id}`).then((response2) => {
           const eventsTotal = [...response.data, ...response2.data];
           sortByStartDate(eventsTotal);
           setEvents(eventsTotal);
@@ -114,7 +106,7 @@ function Events() {
         {events.map((event: EventType, index: number) => {
           const formatedTitle = formatString(event.title);
           return (
-            <Link key={index} href={`/views/event/${event.id}/${formatedTitle}`}>
+            <Link key={index} href={`/views/event/${event.id}/${formatedTitle}${(event.ucfevent) ? `?ucf=true` : ''}`}>
               <EventItem events={event} />
             </Link>
           )}

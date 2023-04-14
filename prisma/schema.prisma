@@ -7,12 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  SUPERADMIN
-  ADMIN
-  STUDENT
-}
-
 model User {
   id         String       @id @default(cuid())
   email      String       @unique
@@ -20,39 +14,40 @@ model User {
   lName      String
   password   String
   role       Role         @default(STUDENT)
+  Event      Event[]
   RSO        RSO[]
   RSOMembers RSOMembers[]
-  Event      Event[]
 
   @@index([email])
 }
 
 model University {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   location    String
   description String
   numStudents Int
-  emailDomain String @unique
-  rso         RSO[]
+  emailDomain String  @unique
   event       Event[]
+  rso         RSO[]
 
   @@index([emailDomain], map: "University_emailDomain_fkey")
 }
 
 model RSO {
-  id          String       @id
-  name        String
-  description String
-  adminId     String
-  rsoMemberId String
+  id           String       @id
+  name         String
+  description  String
+  adminId      String
+  rsoMemberId  String
   universityId String
-  University  University   @relation(fields: [universityId], references: [id])
-  User        User         @relation(fields: [adminId], references: [id])
-  RSOMembers  RSOMembers[]
-  Event       Event[]
+  Event        Event[]
+  User         User         @relation(fields: [adminId], references: [id])
+  University   University   @relation(fields: [universityId], references: [id])
+  RSOMembers   RSOMembers[]
 
   @@index([adminId], map: "RSO_adminId_fkey")
+  @@index([universityId], map: "RSO_universityId_fkey")
 }
 
 model RSOMembers {
@@ -63,6 +58,37 @@ model RSOMembers {
   RSO      RSO    @relation(fields: [rsoID], references: [id])
 
   @@index([rsoID], map: "RSOMembers_rsoID_fkey")
+  @@index([memberId], map: "RSOMembers_memberId_fkey")
+}
+
+model Event {
+  id           String      @id @default(uuid())
+  tags         String
+  title        String
+  description  String
+  starts       String
+  ends         String
+  eventType    EventType
+  eventStatus  EventStatus
+  location     String
+  location_url String
+  hostId       String
+  rsoId        String?
+  universityId String
+  User         User        @relation(fields: [hostId], references: [id])
+  RSO          RSO?        @relation(fields: [rsoId], references: [id])
+  University   University  @relation(fields: [universityId], references: [id])
+
+  @@index([eventType, eventStatus], map: "Event_eventType_eventStatus_fkey")
+  @@index([rsoId], map: "Event_rsoId_fkey")
+  @@index([hostId], map: "Event_hostId_fkey")
+  @@index([universityId], map: "Event_universityId_fkey")
+}
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+  STUDENT
 }
 
 enum EventType {
@@ -75,26 +101,4 @@ enum EventStatus {
   PENDING
   APPROVED
   DENIED
-}
-
-model Event {
-  id          String   @id @default(uuid())
-  tags        String
-  title        String
-  description String
-  starts   String
-  ends     String
-  eventType   EventType
-  eventStatus EventStatus
-  location String
-  location_url    String
-  hostId      String
-  rsoId       String?
-  universityId String
-  University  University   @relation(fields: [universityId], references: [id])
-  User        User     @relation(fields: [hostId], references: [id])
-  RSO         RSO?      @relation(fields: [rsoId], references: [id])
-
-  @@index([eventType, eventStatus], map: "Event_eventType_eventStatus_fkey")
-  @@index([rsoId], map: "Event_rsoId_fkey")
 }

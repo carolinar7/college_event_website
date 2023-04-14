@@ -8,6 +8,9 @@ interface CreateUniversityProps {
   universities: University[],
 }
 
+
+// Use this for inspiration:
+
 const CreateUniversity = ({ setShowPanel, universities }: CreateUniversityProps) => {
   const [name, setName] = useState<string>('');
   const [location, setLocation] = useState<string>('');

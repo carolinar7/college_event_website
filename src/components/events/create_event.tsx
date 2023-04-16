@@ -24,7 +24,7 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
   useEffect(() => {
     if (!data?.user) return;
     const userId = data?.user?.id;
-    axios.get(`${url}/rso?userId=${userId}`).then(({ data }: { data: Array<RSO> }) => {
+    axios.get(`${url}/rso?adminId=${userId}`).then(({ data }: { data: Array<RSO> }) => {
       setRSOs(data);
       if (data && data.length !== 0) {
         const first = data[0] as RSO;

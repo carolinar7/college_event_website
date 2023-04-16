@@ -69,22 +69,43 @@ function Events() {
     });
   }
 
-  useEffect(() => {
-    if (!data?.user) return;
-    axios.get('https://events.ucf.edu/upcoming/feed.json')
+  const getEvents = async () => {
+    return axios.get(`${url}/event?userId=${data?.user.id}`).then((response) => {
+      return response.data
+    });
+  }
+
+  const getUCFEvents = async () => {
+    return await axios.get('https://events.ucf.edu/upcoming/feed.json')
       .then((response: {data: Array<EventType>}) => {
         for (let i = 0; i < response.data.length; i++) {
           response.data[i] = {...response.data[i] as EventType, ucfevent: true};
         }
-        axios.get(`${url}/event?userId=${data?.user.id}`).then((response2) => {
-          const eventsTotal = [...response.data, ...response2.data];
-          sortByStartDate(eventsTotal);
-          setEvents(eventsTotal);
-        })
-      })
-      .catch(error => {
-        console.log(error);
+        return response.data;
       });
+  }
+  
+  const combineUCFEvents = async () => {
+    const ucfEvents = await getUCFEvents();
+    const events =  await getEvents();
+    const eventsTotal = [...events, ...ucfEvents];
+    sortByStartDate(eventsTotal);
+    setEvents(eventsTotal);
+  }
+
+  const showEvents = async () => {
+    const events = await getEvents();
+    sortByStartDate(events);
+    setEvents(events);
+  }
+
+  useEffect(() => {
+    if (!data?.user) return;
+    if (data?.user?.email?.split('@')[1]?.includes('knights.ucf.edu')) {
+      combineUCFEvents();
+    } else {
+      showEvents();
+    }
   }, [data]);
 
   function formatString(str: string) {

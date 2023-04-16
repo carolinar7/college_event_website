@@ -6,14 +6,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const requestMethod = req.method;
   switch (requestMethod) {
     case 'GET':
-      //getRSO(universityId, res).catch((e) => console.log(e));
+      const { userId } = req.query;
+      
+      if (userId) {
+        // return if user is part of rso or not
+        const rso = await prisma.rSOMembers.findMany({
+          where: {
+            memberId: userId as string,
+            rsoID: rsoId as string,
+          }
+        })
+
+        if (rso) {
+          res.status(200).json(true);
+        } else {
+          res.status(200).json(false);
+        }
+        return;
+      }
+
       const rso = await prisma.rSO.findUnique({
         where: {
             id: rsoId as string,
         },
         include:{
             User: true
-            
         }
       })
       res.status(200).json(rso);

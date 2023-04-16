@@ -31,7 +31,7 @@ const SignIn = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-white to-rose-500">
-      <div className='flex flex-col items-center justify-center bg-white h-2/4 w-96 rounded-xl shadow-lg'>
+      <div className='flex flex-col items-center justify-center bg-white w-96 rounded-xl shadow-lg py-10'>
         <Link  className='self-start justify-self-start mb-5 ml-14' href='/'>
           <IoArrowBackOutline style={{color: "#F43F5E"}} size={25}/>
         </Link>
@@ -45,7 +45,7 @@ const SignIn = () => {
           </label>
           <input className='border-b-2 border-rose-500 mb-5' name="password" type="password" onChange={(e) => setPassword(e.target.value)} required />
           <div className="flex flex-1 flex-row justify-center">
-            <Button className='mb-3' type='submit' disabled={disableButton} style={(disableButton) ? {opacity: .75} : undefined} value='Sign In' />
+            <Button className='mt-5 mb-3' type='submit' disabled={disableButton} style={(disableButton) ? {opacity: .75} : undefined} value='Sign In' />
           </div>
         </form>
         <p className="h-5 mb-3">

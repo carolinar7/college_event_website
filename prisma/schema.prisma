@@ -35,12 +35,12 @@ model University {
 }
 
 model RSO {
-  id           String       @id
+  id           String       @id @default(uuid())
   name         String
   description  String
   adminId      String
-  rsoMemberId  String
   universityId String
+  rsoStatus    RSOStatus    @default(PENDING)
   Event        Event[]
   User         User         @relation(fields: [adminId], references: [id])
   University   University   @relation(fields: [universityId], references: [id])
@@ -51,7 +51,7 @@ model RSO {
 }
 
 model RSOMembers {
-  id       String @id
+  id       String @id @default(uuid())
   memberId String
   rsoID    String
   User     User   @relation(fields: [memberId], references: [id])
@@ -98,6 +98,11 @@ enum EventType {
 }
 
 enum EventStatus {
+  PENDING
+  APPROVED
+}
+
+enum RSOStatus {
   PENDING
   APPROVED
 }

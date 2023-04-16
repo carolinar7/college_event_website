@@ -25,7 +25,7 @@ const Home: NextPage = () => {
       <p className="text-8xl mt-10 mb-6 font-semibold text-rose-500 text-center">
         College Events
       </p>
-      <Button className="!shadow-rose-700" onClick={onClick} value='Start'/>
+      <Button className="mt-5 !shadow-rose-700" onClick={onClick} value='Start'/>
     </div>
   );
 };

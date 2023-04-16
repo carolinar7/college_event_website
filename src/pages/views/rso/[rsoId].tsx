@@ -7,23 +7,27 @@ import Nav from "~/components/nav";
 import { url } from "~/helper";
 import Image from "next/image";
 import loadingGif from '../../../assets/loadingGif.gif';
+import { useSession } from "next-auth/react";
 
 
 const RSO = () => {
+  const { data } = useSession();
   const router = useRouter();
   const rsoID = router.query?.rsoId;
   const [rso,setRSO] = useState<any>();
+  const [isMember,setIsMember] = useState(false);
   const [loading,setLoading] = useState(true);
+
   useEffect(() => {
-    if (!rsoID) return;
-    
-      axios.get(`${url}/rso/${rsoID}`).then(({ data }) => {
-        console.log(data);
-        setRSO(data);
-        setLoading(false);
-      }).catch(() => {return;});
-    
-  }, [rsoID])
+    if (!rsoID || !data?.user.id) return;
+    axios.get(`${url}/rso/${rsoID}`).then(({ data }) => {
+      setRSO(data);
+      setLoading(false);
+    }).catch(() => {return;});
+    axios.get(`${url}/rso/${rsoID}?userId=${data?.user.id}`).then(({ data }) => {
+      setIsMember(data);
+    }).catch(() => {return;});
+  }, [rsoID, data])
 
   console.log(router.query?.rsoId);
   console.log("Heya");
@@ -48,9 +52,9 @@ const RSO = () => {
         </div>
         <div className="col-span-4">
           <div className="flex flex-col h-full">
+            <Button className='mb-5' value={(isMember) ? "Leave RSO" : "Join RSO"}/>
             <div className="border-b border-gray-400"></div>
             <div className="flex flex-col ">
-              <Button value="Join RSO"/>
               <p className="pt-2 text-2xl font-bold">Contact:</p>  
               <div className="flex py-2 items-center">
                 <p className="text-xl mr-2"><IoPerson /></p>

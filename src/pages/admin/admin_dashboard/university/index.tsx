@@ -32,7 +32,7 @@ const Universities = () => {
           onClick={() => {setShowPanel(false)}}
         />
         <div
-          className="fixed top-36 left-1/4 w-1/2 bg-white rounded-xl p-10"
+          className="fixed left-1/4 w-1/2 bg-white rounded-xl p-10"
           style={{display: (showPanel) ? undefined : 'none'}}
         >
           <CreateUniversity setShowPanel={setShowPanel} universities={data as University[]}/>

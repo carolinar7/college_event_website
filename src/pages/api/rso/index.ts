@@ -1,32 +1,28 @@
-// Create a handler for GET requests to /api/rso that takes a query parameter of rsoId and returns the RSOs with that ID.
-
-//import { EventStatus } from "@prisma/client";
+import { RSOStatus } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "~/server/db";
-
-/*export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    const { userId } = req.query;
-    if (userId) {
-      const rsos = await prisma.rSO.findMany({
-        where: {
-          adminId: userId as string,
-        },
-      });
-      res.status(200).json(rsos);
-    }
-  }
-}*/
-
-//import type { NextApiRequest, NextApiResponse } from 'next';
-//import { prisma } from '../../../server/db'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method;
   switch (requestMethod) {
     case 'GET':
-      const { userId } = req.query;
-      if (userId) {
+      const { userId, status } = req.query;
+      if (status === 'pending') {
+        const rsos = await prisma.rSO.findMany({
+          where: {
+            rsoStatus: RSOStatus.PENDING,
+          },
+          include: {
+            User: true,
+            RSOMembers: {
+              include: {
+                User: true,
+              },
+            },
+          },
+        });
+        res.status(200).json(rsos);
+      } else if (userId) {
         const rsos = await prisma.rSO.findMany({
           where: {
             adminId: userId as string,
@@ -40,37 +36,64 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       break;
     case 'POST':
-      const body = req.body as PostUniversity;
-      createUniversity(body, res).catch((e) => console.log(e));
+      const { name, description, adminId, emailDomain, admin1, admin2, admin3, admin4 } = req.body;
+
+      const university = await prisma.university.findFirst({
+        where: {
+          emailDomain: emailDomain,
+        },
+      });
+
+      // find users whose email are admin1, admin2, admin3, admin4
+      const users = await prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              id: adminId,
+            },
+            {
+              email: admin1,
+            },
+            {
+              email: admin2,
+            },
+            {
+              email: admin3,
+            },
+            {
+              email: admin4,
+            },
+          ],
+        },
+      });
+
+      const rso = await prisma.rSO.create({
+        data: {
+          name,
+          description,
+          adminId,
+          universityId: university?.id as string,
+          RSOMembers: {
+            create: users.map((user) => ({
+              memberId: user.id,
+            })),
+          }  
+        },
+      }).catch((e) => {
+        console.log(e);
+        res.status(400).json({error: "The members provided are not registered"});
+        return;
+      });
+
+      res.status(200).json(rso);
+      break;
   }
-}
 
 const getRSOs = async (res: NextApiResponse) => {
-  const rsos = await prisma.rSO.findMany();
+  const rsos = await prisma.rSO.findMany({
+    where: {
+      rsoStatus: RSOStatus.APPROVED,
+    },
+  });
   res.status(200).json(rsos);
-}
-
-export type PostUniversity = {
-  name: string,
-  location: string,
-  description: string,
-  numStudents: number,
-  emailDomain: string
-};
-
-const createUniversity = async (body: PostUniversity, res: NextApiResponse) => {
-  try {
-    const university = await prisma.university.create({
-      data: {
-        name: body.name,
-        location: body.location,
-        description: body.description,
-        numStudents: body.numStudents,
-        emailDomain: body.emailDomain
-      }
-    });
-    res.status(200).json(university);
-  } catch (e) {
-    res.status(400).json({});
-  }
 }

@@ -48,7 +48,11 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
       tags,
       rsoId: eventType === 'rso' ? rsoId : undefined,
     }).then(({ data }: { data: Event }) => {
-      alert(`Event ${data.title} was created!`);
+      if (eventType === 'public') {
+        alert(`Event ${data.title} was sent for approval!`);
+      } else {
+        alert(`Event ${data.title} was created!`);
+      }
     });
 
     setShowPanel(false);
@@ -95,7 +99,7 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
       <input className='border-b-2 border-rose-500 mb-3' type="datetime-local" name="starts" value={starts} onChange={(e) => setStarts(e.target.value)} required/>
       <label className='text-xl font-bold mb-3'>Ends</label>
       <input className='border-b-2 border-rose-500 mb-3' type="datetime-local" name="ends" value={ends} onChange={(e) => setEnds(e.target.value)} required/>
-      <label className='text-xl font-bold mb-3'>Tags</label>
+      <label className='text-xl font-bold mb-3'>Categories</label>
       <input className='border-b-2 border-rose-500 mb-3' type="text" name="tag" value={tags} onChange={(e) => setTag(e.target.value)} required/>
       <label className='text-xl font-bold mb-3'>Description</label>
       <textarea rows={3} className='border-b-2 border-rose-500 mb-3' name="description" value={description} onChange={(e) => setDescription(e.target.value)} required/>

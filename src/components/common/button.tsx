@@ -12,7 +12,7 @@ interface ButtonProps {
 const Button = ({className, value, disabled, type, style, onClick}: ButtonProps) => {
   return (
     <button 
-      className={`bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-md shadow-gray-400 ${className || ''}`} 
+      className={`bg-rose-500 w-28 rounded-3xl p-2 text-white text-lg shadow-md shadow-gray-400 ${className || ''}`} 
       type={type}
       disabled={disabled}
       style={style}

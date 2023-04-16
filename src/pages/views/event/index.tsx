@@ -98,30 +98,32 @@ function Events() {
   return (
     <div>
       <Nav />
-      <div className="flex my-3 mx-5 items-center justify-between">
-        <h1 className="text-4xl font-bold text-rose-500 underline">Events</h1>
-        {isAdmin() && <Button className="p-0 mt-0 w-32 h-12" value="Create Event" onClick={() => setShowPanel(!showPanel)}/>}
-      </div>
-      <ul>
-        {events.map((event: EventType, index: number) => {
-          const formatedTitle = formatString(event.title);
-          return (
-            <Link key={index} href={`/views/event/${event.id}/${formatedTitle}${(event.ucfevent) ? `?ucf=true` : ''}`}>
-              <EventItem events={event} />
-            </Link>
+      <div className="flex flex-col">
+        <div className="flex m-5 items-center justify-between">
+          <h1 className="text-4xl font-bold text-rose-500">Events</h1>
+          {isAdmin() && <Button className="p-0 mt-0 w-32 h-12" value="Create Event" onClick={() => setShowPanel(!showPanel)}/>}
+        </div>
+        <ul>
+          {events.map((event: EventType, index: number) => {
+            const formatedTitle = formatString(event.title);
+            return (
+              <Link key={index} href={`/views/event/${event.id}/${formatedTitle}${(event.ucfevent) ? `?ucf=true` : ''}`}>
+                <EventItem events={event} />
+              </Link>
+            )}
           )}
-        )}
-      </ul>
-      <div
-          className="fixed h-screen w-screen top-0 left-0 bg-black opacity-30"
+        </ul>
+        <div
+            className="fixed h-screen w-screen top-0 left-0 bg-black opacity-30"
+            style={{display: (showPanel) ? undefined : 'none'}}
+            onClick={() => {setShowPanel(false)}}
+        />
+        <div
+          className="fixed left-1/4 w-1/2 bg-white rounded-xl p-10"
           style={{display: (showPanel) ? undefined : 'none'}}
-          onClick={() => {setShowPanel(false)}}
-      />
-      <div
-        className="fixed top-36 left-1/4 w-1/2 bg-white rounded-xl p-10"
-        style={{display: (showPanel) ? undefined : 'none'}}
-      >
-        <CreateEvent setShowPanel={setShowPanel} />
+        >
+          <CreateEvent setShowPanel={setShowPanel} />
+        </div>
       </div>
     </div>
   );

@@ -6,7 +6,22 @@ import { prisma } from '~/server/db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    const { userId } = req.query;
+    const { userId, status } = req.query;
+    
+    if (status === "pending") {
+      const events = await prisma.event.findMany({
+        where: {
+          eventType: EventType.PUBLIC,
+          eventStatus: EventStatus.PENDING,
+        },
+        include: {
+          User: true,
+        },
+        distinct: ['id'],
+      });
+      res.status(200).json(events);
+      return;
+    }
 
     const user = await prisma.user.findUnique({
       where: {

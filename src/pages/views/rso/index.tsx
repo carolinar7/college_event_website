@@ -6,16 +6,19 @@ import { RSO } from "@prisma/client";
 import { url } from "~/helper";
 import axios from "axios";
 import CreateRSO from "~/components/rsos/create_rso";
+import { useSession } from "next-auth/react";
 
 const RSOs = () => {
+  const { data } = useSession();
   const [rsos, setRSOs] = useState<RSO[]>();
   const [showPanel, setShowPanel] = useState<boolean>(false);
   
   useEffect(() => {
-    axios.get(`${url}/rso`).then(({ data }: { data: RSO[] }) => {
+    if (!data?.user) return;
+    axios.get(`${url}/rso?userId=${data?.user.id}`).then(({ data }: { data: RSO[] }) => {
       setRSOs(data)
     }).catch(() => {return;});
-  }, [])
+  }, [data])
 
   return (
     <div>

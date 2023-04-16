@@ -68,7 +68,7 @@ const University = () => {
             <input className='border-b-2 border-rose-500 mb-3' type="number" name="numStudents" value={numStudents} onChange={(e) => setNumStudents(e.target.valueAsNumber)} required/>
             <label className='text-xl font-bold mb-3'>Email Domain</label>
             <input className='border-b-2 border-rose-500' type="string" placeholder='knights.ucf.edu' name="emailDomain" value={emailDomain} onChange={(e) => setEmailDomain(e.target.value)} required/>
-            <div className='flex'>
+            <div className='flex mt-5'>
               <Button className='mb-3 mr-5' value='Save' type='submit' style={(disableButton) ? {opacity: .75} : undefined}/>
               <Button className='!bg-red-500 mb-3' value='Delete' onClick={() => {onDeleteUniversity().catch(() => {return})}}/>
             </div>

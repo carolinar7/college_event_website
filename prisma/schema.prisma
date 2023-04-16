@@ -17,6 +17,7 @@ model User {
   Event      Event[]
   RSO        RSO[]
   RSOMembers RSOMembers[]
+  Comment    Comment[]
 
   @@index([email])
 }
@@ -78,11 +79,25 @@ model Event {
   User         User        @relation(fields: [hostId], references: [id])
   RSO          RSO?        @relation(fields: [rsoId], references: [id])
   University   University  @relation(fields: [universityId], references: [id])
+  Comment      Comment[]
 
   @@index([eventType, eventStatus], map: "Event_eventType_eventStatus_fkey")
   @@index([rsoId], map: "Event_rsoId_fkey")
   @@index([hostId], map: "Event_hostId_fkey")
   @@index([universityId], map: "Event_universityId_fkey")
+}
+
+model Comment {
+  id      String @id @default(uuid())
+  rating  Int
+  comment String
+  userId  String
+  eventId String
+  User    User   @relation(fields: [userId], references: [id])
+  Event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Comment_userId_fkey")
+  @@index([eventId], map: "Comment_eventId_fkey")
 }
 
 enum Role {

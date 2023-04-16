@@ -8,6 +8,7 @@ import { EventType } from "..";
 import loadingGif from '../../../../assets/loadingGif.gif';
 import Image from "next/image";
 import Comments from "~/components/comments";
+import SocialMediaShare from "~/components/share";
 
 const EmptyEvent = {
   id: '',
@@ -87,8 +88,15 @@ const Event = () => {
                 <p>{events.contact_email}</p>
               </div>
               <div className="border-b border-gray-400"></div>
+              <div>
+              <p className="pt-2 text-2xl font-bold">Share:</p>  
+              <p className="py-2"><SocialMediaShare/></p>
+              </div>
+              <div className="border-b border-gray-400"></div>
+              <div>
               <p className="pt-2 text-2xl font-bold">Comments:</p>  
               <p className="py-2"><Comments/></p>
+              </div>
             </div>
           </div>
         </div>

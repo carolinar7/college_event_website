@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { FaStar } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 
 interface Comment {
   id: number;
@@ -15,6 +15,8 @@ function Comments() {
   const [inputValue, setInputValue] = useState("");
   const [rating, setRating] = useState(0);
   const [inputHeight, setInputHeight] = useState(40);
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null);
+
 
   function handleInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setInputValue(event.target.value);
@@ -26,17 +28,37 @@ function Comments() {
   }
 
   function handleAddComment() {
-    const newComment: Comment = {
-      id: comments.length + 1,
-      body: inputValue,
-      rating: rating,
-      date: new Date().toLocaleString()
-    };
-    setComments([newComment, ...comments]);
-    setInputValue("");
-    setRating(0);
-    setInputHeight(40);
+    if (selectedComment) {
+      const updatedComment = { ...selectedComment, body: inputValue, rating: rating };
+      setComments(comments.map(comment => comment.id === selectedComment.id ? updatedComment : comment));
+      setInputValue("");
+      setRating(0);
+      setSelectedComment(null);
+      setInputHeight(40);
+    } else {
+      const newComment: Comment = {
+        id: comments.length + 1,
+        body: inputValue,
+        rating: rating,
+        date: new Date().toLocaleString()
+      };
+      setComments([newComment, ...comments]);
+      setInputValue("");
+      setRating(0);
+      setInputHeight(40);
+    }
   }
+
+  function handleEditComment(comment: Comment) {
+    setSelectedComment(comment);
+    setInputValue(comment.body);
+    setRating(comment.rating);
+  }
+
+  function handleDeleteComment(comment: Comment) {
+    setComments(comments.filter(c => c.id !== comment.id));
+  }
+  
 
   const containerStyle = {
     minHeight: "300px",
@@ -47,22 +69,26 @@ function Comments() {
   return (
     <div style={containerStyle}>
       <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>
-            <div className="border rounded-md p-4 flex items-start flex-col">
-              <div className="flex items-center mb-2">
-                <div className="mr-4">
-                  <CgProfile size={30} />
-                </div>
-                <p>{comment.body}</p>
+      {comments.map((comment) => (
+        <li key={comment.id}>
+          <div className="border rounded-md p-4 flex items-start flex-col">
+            <div className="flex items-center mb-2">
+              <div className="mr-4">
+                <CgProfile size={30} />
               </div>
-              <div className="flex justify-between w-full text-gray-500 text-sm">
-                <div>Rating: {comment.rating}</div>
-                <div>{comment.date}</div>
-              </div>
+              <p>{comment.body}</p>
             </div>
-          </li>
-        ))}
+            <div className="flex justify-between w-full text-gray-500 text-sm">
+              <div>Rating: {comment.rating}</div>
+              <div>{comment.date}</div>
+            </div>
+            <div className="flex justify-end mt-2 w-full">
+              <AiFillEdit className="mr-2 cursor-pointer" onClick={() => handleEditComment(comment)} />
+              <AiFillDelete className="cursor-pointer" onClick={() => handleDeleteComment(comment)} />
+            </div>
+          </div>
+        </li>
+      ))}
       </ul>
       <div className="py-2" style={{ display: "flex" }}>
         {[...Array(5)].map((_, index) => {

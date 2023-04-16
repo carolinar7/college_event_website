@@ -21,7 +21,7 @@ const CreateRSO = (props: any) => {
     const email4 = admin4.split('@')[1];
     const email = data?.user?.email as string;
     const userDomain = email.split('@')[1];
-    return email1 === email2 && email2 === email3 && email3 === email4 && email1 !== userDomain
+    return email1 === userDomain && email2 === userDomain && email3 === userDomain && email4 === userDomain;
   }
   
   const onCreateRSO = async (e: FormEvent<HTMLFormElement>) => {
@@ -31,7 +31,7 @@ const CreateRSO = (props: any) => {
     const email = data?.user?.email as string;
 
     if (!checkEmailDomains()) {
-      alert('Email domains must match and cannot be the same as the user domain');
+      alert('Email domains must match for all members');
       return;
     };
     
@@ -46,17 +46,17 @@ const CreateRSO = (props: any) => {
       admin4,
     }).then(({ data }: { data: RSO }) => {
       alert(`RSO ${data.name} was sent for approval!`);
+      props.setShowPanel(false);
+      setName('');
+      setDescription('');
+      setAdmin1('');
+      setAdmin2('');
+      setAdmin3('');
+      setAdmin4('');
+      setDisableButton(false);
+    }).catch((e) => {
+      alert(e.response.data.error);
     });
-
-    props.setShowPanel(false);
-
-    setName('');
-    setDescription('');
-    setAdmin1('');
-    setAdmin2('');
-    setAdmin3('');
-    setAdmin4('');
-    setDisableButton(false);
   }
 
   return (

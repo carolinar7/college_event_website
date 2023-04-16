@@ -5,27 +5,6 @@ import SidePanel from "~/components/admin_dashboard/side_panel";
 import Nav from "~/components/nav";
 import { url } from "~/helper";
 
-const MockData = Array(10).fill({
-  name: 'Resume Review',
-  type: 'Personal Development',
-  time: '3 - 5 PM',
-  date: 'May 15, 2023',
-  location: 'HEC 101',
-  admin: 'John Doe',
-  phone: '111-111-1111',
-  email: 'johndoe@knights.ucf.edu',
-  description: 'Resume Review Day is a perfect opportunity for you to share your expertise and meet our students 1:1, some of whom are interested in your organization or industry, and others that are just looking for a professional\'s opinion. You will review a student\'s resume, and if appropriate, exchange contact information and invite them to learn more about your organization at one of the Career Fairs – all in under 10 minutes!',
-}) as Array<{
-  name: string,
-  type: string,
-  time: string,
-  date: string,
-  admin: string,
-  phone: string,
-  email: string,
-  description: string,
-}>
-
 const PublicEventRequests = () => {
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

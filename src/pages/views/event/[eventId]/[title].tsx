@@ -93,6 +93,8 @@ const Event = () => {
                 </div>
                 {(!ucf) &&
                   <div>
+                    <p className="pt-2 text-2xl font-bold">Share:</p>  
+                    <p className="py-2"><SocialMediaShare/></p>
                     <div className="border-b border-gray-400"></div>
                     <p className="pt-2 text-2xl font-bold">Comments:</p>
                     <p className="py-2"><Comments/></p>

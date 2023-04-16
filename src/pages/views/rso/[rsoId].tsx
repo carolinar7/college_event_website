@@ -29,8 +29,13 @@ const RSO = () => {
     }).catch(() => {return;});
   }, [rsoID, data])
 
-  console.log(router.query?.rsoId);
-  console.log("Heya");
+  const joinRSO = async () => {
+    await axios.post(`${url}/rso/${rsoID}`, {
+      memberId: data?.user.id,
+    }).then(() => {
+      setIsMember(!isMember);
+    }).catch(() => {return;});
+  }
 
   if (loading) {
     return (
@@ -52,7 +57,7 @@ const RSO = () => {
         </div>
         <div className="col-span-4">
           <div className="flex flex-col h-full">
-            <Button className='mb-5' value={(isMember) ? "Leave RSO" : "Join RSO"}/>
+            <Button className='mb-5' value={(isMember) ? "Leave RSO" : "Join RSO"} onClick={() => joinRSO()} />
             <div className="border-b border-gray-400"></div>
             <div className="flex flex-col ">
               <p className="pt-2 text-2xl font-bold">Contact:</p>  

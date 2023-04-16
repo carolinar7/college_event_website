@@ -9,8 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { userId } = req.query;
       
       if (userId) {
-        // return if user is part of rso or not
-        const rso = await prisma.rSOMembers.findMany({
+        const rso = await prisma.rSOMembers.findFirst({
           where: {
             memberId: userId as string,
             rsoID: rsoId as string,
@@ -35,9 +34,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
       res.status(200).json(rso);
       break;
-    // case 'POST':
-    //   const body = req.body as PostUniversity;
-    //   updateUniversity(universityId, body, res).catch((e) => console.log(e));
-    //   return;
+    case 'POST':
+      const { memberId } = req.body;
+
+      const rsoMember = await prisma.rSOMembers.findFirst({
+        where: {
+          memberId: memberId,
+          rsoID: rsoId as string,
+        }
+      });
+
+      if (rsoMember) {
+        await prisma.rSOMembers.deleteMany({
+          where: {
+            memberId: memberId,
+            rsoID: rsoId as string,
+          }
+        });
+
+        res.status(200).json({});
+        
+        return;
+      }
+
+      await prisma.rSOMembers.create({
+        data: {
+          memberId: memberId,
+          rsoID: rsoId as string,
+        }
+      });
+
+      res.status(200).json({});
+
+      break;
   }
 }

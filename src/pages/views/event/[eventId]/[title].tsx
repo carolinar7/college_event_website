@@ -8,6 +8,7 @@ import loadingGif from '../../../../assets/loadingGif.gif';
 import Image from "next/image";
 import Comments from "~/components/comments";
 import { url } from "~/helper";
+import ShareButtons from "~/components/share";
 
 const Event = () => {
   const router = useRouter();
@@ -59,43 +60,45 @@ const Event = () => {
   return (
     <>
       <Nav />
-      <div className="m-5 flex flex-col">
+      <div className="m-5 flex flex-col items-center">
         <div className='flex justify-between'>
-          <div className="col-span-8">
-            <p className="text-4xl font-bold mb-5 underline text-rose-500">{events.title}</p>
+          <div className="col-span-8 mr-10">
+            <div className="text-4xl font-bold mb-5 underline text-rose-500">{events.title}</div>
             {!ucf && <Image src={events.image_url} alt="image" width={500} height={200}/>}
             <div className="py-2 flex">
-              <p className="text-xl font-bold">{events.starts}</p>
-              <p className="text-xl font-bold ml-2">to {events.ends}</p>
+              <div className="text-xl font-bold">{events.starts}</div>
+              <div className="text-xl font-bold ml-2">to {events.ends}</div>
             </div>
             <div className="max-w-3xl overflow-hidden" dangerouslySetInnerHTML={{ __html: events.description }} />
-            <p className="py-2 max-w-3xl overflow-hidden"><Map location_url={events.location_url}/></p>
+            <div className="py-2 max-w-3xl overflow-hidden"><Map location_url={events.location_url}/></div>
           </div>
           <div className="col-span-4">
             <div className="flex flex-col h-full">
               <div>
-                <p className="text-2xl font-bold">Location:</p>
+                <div className="text-2xl font-bold">Location:</div>
                 <div className="flex py-2 items-center">
-                <p className="text-xl mr-2"><IoLocationSharp /></p>
-                <p>{events.location}</p>
+                  <div className="text-xl mr-2"><IoLocationSharp /></div>
+                  <div>{events.location}</div>
                 </div>
               </div>
               <div className="border-b border-gray-400"></div>
               <div className="flex flex-col ">
-                <p className="pt-2 text-2xl font-bold">Contact:</p>
+                <div className="pt-2 text-2xl font-bold">Contact:</div>
                 <div className="flex py-2 items-center">
-                  <p className="text-xl mr-2"><IoPerson /></p>
-                  <p>{events.contact_name}</p>
+                  <div className="text-xl mr-2"><IoPerson /></div>
+                  <div>{events.contact_name}</div>
                 </div>
                 <div className="flex py-2 items-center">
-                  <p className="text-xl mr-2"><IoMail /></p>
-                  <p>{events.contact_email}</p>
+                  <div className="text-xl mr-2"><IoMail /></div>
+                  <div>{events.contact_email}</div>
                 </div>
                 {(!ucf) &&
-                  <div>
+                  <div className="flex flex-col">
                     <div className="border-b border-gray-400"></div>
-                    <p className="pt-2 text-2xl font-bold">Comments:</p>
-                    <p className="py-2"><Comments/></p>
+                    <div className="pt-2 text-2xl font-bold">Share:</div>  
+                    <div className="py-2"><ShareButtons eventId={eventID} title={title}/></div>
+                    <div className="pt-2 text-2xl font-bold">Comments:</div>
+                    <div className="py-2"><Comments eventId={eventID}/></div>
                   </div>
                 }
               </div>

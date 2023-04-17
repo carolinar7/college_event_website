@@ -1,6 +1,6 @@
 import { RSOStatus } from "@prisma/client";
 import axios from "axios";
-import { IoCheckmark, IoClose, IoMail, IoPeople, IoPerson } from "react-icons/io5";
+import { IoBusinessSharp, IoCheckmark, IoClose, IoMail, IoPeople, IoPerson } from "react-icons/io5";
 import { url } from "~/helper";
 
 const RSORequestListItem = (props: any) => {
@@ -32,6 +32,10 @@ const RSORequestListItem = (props: any) => {
       <div className='flex justify-start items-center'>
         <IoPerson className='mr-2' />
         {props.item.User.fName + ' ' + props.item.User.lName}
+      </div>
+      <div className='flex justify-start items-center'>
+        <IoBusinessSharp className='mr-2' />
+        {props.item.University.name}
       </div>
       <div className='flex justify-start items-center'>
         <IoMail className='mr-2' />

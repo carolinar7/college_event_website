@@ -30,7 +30,7 @@ const RSOs = () => {
         </div>
         {rsos?.map((rso,index)=>{
           return <Link href = {`/views/rso/${rso.id}`} key = {index} >
-            <div className="mx-5 mb-5 bg-gray-200 hover:bg-gray-300 cursor-pointer p-2">
+            <div className="m-5 bg-gray-200 hover:bg-gray-300 cursor-pointer p-2">
               <p className="text-2xl mb-2 font-bold underline text-rose-500">{rso.name}</p>
               <div>{rso.description}</div>
             </div>

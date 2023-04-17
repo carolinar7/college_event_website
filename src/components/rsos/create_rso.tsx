@@ -54,6 +54,7 @@ const CreateRSO = (props: any) => {
 
     if (!checkEmailDomains()) {
       alert('Email domains must match for all members');
+      setDisableButton(false);
       return;
     };
     

@@ -117,7 +117,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const event = await prisma.event.create({
       data: postData
     });
-    res.json(event);
+    res.status(200).json(event);
   }
 }
 

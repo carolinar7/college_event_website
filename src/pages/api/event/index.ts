@@ -35,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         OR: [
           {
             eventType: EventType.PUBLIC,
+            eventStatus: EventStatus.APPROVED,
           },
           {
             eventType: EventType.PRIVATE,
@@ -48,7 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
           {
             eventType: EventType.RSO,
-            eventStatus: EventStatus.APPROVED,
             AND: [
               {
                 RSO: {
@@ -69,7 +69,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json(events);
   } else if (req.method === "POST") {
     const body = req.body;
-    console.log(body)
 
     const user = await prisma.user.findUnique({
       where: {
@@ -90,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       starts: convertDate(body.starts),
       ends: convertDate(body.ends),
       tags: body.tags,
+      image_url: body.image_url,
       eventType: body.eventType.toUpperCase(),
       eventStatus: (body.eventType === "public") ? EventStatus.PENDING : EventStatus.APPROVED,
       location: body.location,

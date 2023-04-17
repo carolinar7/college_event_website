@@ -38,9 +38,10 @@ model University {
 model RSO {
   id           String       @id @default(uuid())
   name         String
-  description  String
+  description  String @db.VarChar(1000)
   adminId      String
   universityId String
+  image_url    String
   rsoStatus    RSOStatus    @default(PENDING)
   Event        Event[]
   User         User         @relation(fields: [adminId], references: [id])
@@ -66,13 +67,14 @@ model Event {
   id           String      @id @default(uuid())
   tags         String
   title        String
-  description  String
+  description  String   @db.VarChar(1000)
   starts       String
   ends         String
   eventType    EventType
   eventStatus  EventStatus
   location     String
   location_url String
+  image_url    String
   hostId       String
   rsoId        String?
   universityId String

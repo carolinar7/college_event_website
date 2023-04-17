@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       getRSOs(res, userId as string).catch((e) => console.log(e));
     }
   } else if (requestMethod === 'POST') {
-    const { name, description, adminId, emailDomain, admin1, admin2, admin3, admin4 } = req.body;
+    const { name, description, adminId, emailDomain, admin1, admin2, admin3, admin4, image_url } = req.body;
 
     const university = await prisma.university.findFirst({
       where: {
@@ -70,6 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         name,
         description,
         adminId,
+        image_url,
         universityId: university?.id as string,
         RSOMembers: {
           create: users.map((user) => ({

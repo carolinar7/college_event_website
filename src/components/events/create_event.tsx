@@ -1,8 +1,10 @@
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { RSO, type Event } from "@prisma/client";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { type FormEvent, useState, type SetStateAction, type Dispatch, useEffect } from "react";
-import { url } from "~/helper";
+import { env } from "~/env.mjs";
+import { s3Client, url } from "~/helper";
 
 interface CreateEventsProps {
   setShowPanel: Dispatch<SetStateAction<boolean>>,
@@ -19,6 +21,7 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
   const [eventType, setEventType] = useState<string>('public');
   const [RSOs, setRSOs] = useState<Array<RSO>>([]);
   const [rsoId, setRSOId] = useState<string>('');
+  const [image, setImage] = useState<any>(null);
   const [disableButton, setDisableButton] = useState<boolean>(false);
 
   useEffect(() => {
@@ -32,10 +35,29 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
       }
     })
   }, [data]);
+
+  const formatEventTitle = (title: string) => {
+    return title.replace(/\s+/g, '-').toLowerCase();
+  }
   
   const onCreateEvent = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setDisableButton(true);
+
+    const formatedTitle = formatEventTitle(title);
+    const image_name = `${formatedTitle}${image.name}`;
+
+    await s3Client.send(new PutObjectCommand(
+      {
+        Bucket: env.NEXT_PUBLIC_DO_SPACES_NAME,
+        ACL: "public-read",
+        Key: image_name,
+        Body: image,
+      }
+    ));
+
+    const image_url = `https://${env.NEXT_PUBLIC_DO_SPACES_NAME}.nyc3.digitaloceanspaces.com/${image_name}`;
+
     const userId = data?.user?.id;
     await axios.post(`${url}/event`, {
       title,
@@ -46,6 +68,7 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
       eventType,
       userId,
       tags,
+      image_url,
       rsoId: eventType === 'rso' ? rsoId : undefined,
     }).then(({ data }: { data: Event }) => {
       if (eventType === 'public') {
@@ -65,6 +88,7 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
     setEventType('');
     setRSOId('');
     setTag('');
+    setImage(null);
     setDisableButton(false);
   }
 
@@ -102,11 +126,19 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
       <label className='text-xl font-bold mb-3'>Categories</label>
       <input className='border-b-2 border-rose-500 mb-3' type="text" name="tag" value={tags} onChange={(e) => setTag(e.target.value)} required/>
       <label className='text-xl font-bold mb-3'>Description</label>
-      <textarea rows={3} className='border-b-2 border-rose-500 mb-3' name="description" value={description} onChange={(e) => setDescription(e.target.value)} required/>
+      <textarea rows={3} className='border-b-2 border-rose-500 mb-3' name="description" value={description} onChange={(e) => setDescription(e.target.value)} required/>      
+      <label className='text-xl font-bold mb-3'>Upload Image</label>
+      <input className='mb-3 cursor-pointer' type="file" name="image" required
+        onChange={(e) => {
+          if (!e?.target?.files) return;
+          setImage(e?.target?.files[0])
+        }}
+      />
       <button 
         className='bg-rose-500 w-28 rounded-3xl p-2 text-white mt-5 text-lg shadow-lg mb-3 mr-5'
         type="submit"
         style={(disableButton) ? {opacity: .75} : undefined}
+        disabled={disableButton}
       >
         Create
       </button>

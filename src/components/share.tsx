@@ -1,15 +1,14 @@
 import React from 'react';
 import { FaFacebookSquare, FaTwitterSquare } from 'react-icons/fa';
 
-function ShareButtons() {
-
+function ShareButtons(props: any) {
   function shareFacebook() {
-    const url = 'https://www.example.com';
+    const url = `https://college-event-website.vercel.app/views/event/${props.eventId}/${props.title}`;
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, 'share', 'width=600,height=400');
   }
 
   function shareTwitter() {
-    const url = 'https://www.example.com';
+    const url = `https://college-event-website.vercel.app/views/event/${props.eventId}/${props.title}`;
     const text = 'Check out this cool event!';
     window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, 'share', 'width=600,height=400');
   }

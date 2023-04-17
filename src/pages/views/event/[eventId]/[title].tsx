@@ -8,7 +8,7 @@ import loadingGif from '../../../../assets/loadingGif.gif';
 import Image from "next/image";
 import Comments from "~/components/comments";
 import { url } from "~/helper";
-import { useSession } from "next-auth/react";
+import ShareButtons from "~/components/share";
 
 const Event = () => {
   const router = useRouter();
@@ -96,7 +96,7 @@ const Event = () => {
                   <div className="flex flex-col">
                     <div className="border-b border-gray-400"></div>
                     <div className="pt-2 text-2xl font-bold">Share:</div>  
-                    <div className="py-2"><SocialMediaShare/></div>
+                    <div className="py-2"><ShareButtons eventId={eventID} title={title}/></div>
                     <div className="pt-2 text-2xl font-bold">Comments:</div>
                     <div className="py-2"><Comments eventId={eventID}/></div>
                   </div>

@@ -49,7 +49,7 @@ const CreateRSO = (props: any) => {
 
     const image_url = `https://${env.NEXT_PUBLIC_DO_SPACES_NAME}.nyc3.digitaloceanspaces.com/${image_name}`;
 
-    const adminId = data?.user?.id;
+    const adminId = data?.user?.id as string;
     const email = data?.user?.email as string;
 
     if (!checkEmailDomains()) {
@@ -57,16 +57,19 @@ const CreateRSO = (props: any) => {
       setDisableButton(false);
       return;
     };
+
+    const emailDomain = email.split('@')[1];
     
     await axios.post(`${url}/rso`, {
       name,
       description,
       adminId,
-      adminDomain: email.split('@')[1],
+      emailDomain: emailDomain,
       admin1,
       admin2,
       admin3,
       admin4,
+      admin5: email,
       image_url,
     }).then(({ data }: { data: RSO }) => {
       alert(`RSO ${data.name} was sent for approval!`);

@@ -80,7 +80,6 @@ const CreateRSO = (props: any) => {
       setAdmin2('');
       setAdmin3('');
       setAdmin4('');
-      setImage(null);
       setDisableButton(false);
     }).catch((e) => {
       alert(e.response.data.error);

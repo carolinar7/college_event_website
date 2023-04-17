@@ -3,7 +3,6 @@ import { prisma } from '~/server/db';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const eventId = req.query?.eventId as string;
-  const commentId = req.query?.commentId as string;
 
   if (req.method === 'GET') {
     const comments = await prisma.comment.findMany({
@@ -28,20 +27,22 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     });
     res.status(200).json(com);
   } else if (req.method === "PUT") {
-    const { comment, rating, userId, eventId } = req.body;
+    const { commentId, comment, rating } = req.body;
     const com = await prisma.comment.update({
       where: {
         id: commentId,
       },
       data: {
         comment,
-        rating,
-        userId,
-        eventId,
+        rating
+      },
+      include: {
+        User: true,
       },
     });
     res.status(200).json(com);
   } else if (req.method === "DELETE") {
+    const { commentId } = req.body;
     const commment = await prisma.comment.delete({
       where: {
         id: commentId,

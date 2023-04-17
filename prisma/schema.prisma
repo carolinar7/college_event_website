@@ -95,6 +95,7 @@ model Comment {
   comment String
   userId  String
   eventId String
+  updatedAt DateTime  @updatedAt
   User    User   @relation(fields: [userId], references: [id])
   Event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 

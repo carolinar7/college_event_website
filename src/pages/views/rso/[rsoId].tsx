@@ -50,9 +50,9 @@ const RSO = () => {
 
   return <>
     <Nav />
-    <div className="m-5 flex flex-col">
+    <div className="m-5 flex flex-col items-center">
         <div className="flex justify-between">
-          <div className="col-span-8">
+          <div className="col-span-8 mr-5">
             <p className="text-4xl font-bold underline text-rose-500 mb-5">{rso?.name}</p>
             <Image src={rso.image_url} alt="image" width={500} height={200} className="mb-5"/>
             <div className="max-w-3xl overflow-hidden"  >{rso?.description}</div>

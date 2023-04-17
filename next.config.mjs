@@ -20,5 +20,17 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "college-events-website.nyc3.digitaloceanspaces.com",
+        port: "",
+        pathname: "/*",
+      },
+    ],
+  }
 };
+
 export default config;

@@ -42,7 +42,7 @@ const RSOs = () => {
           onClick={() => {setShowPanel(false)}}
         />
         <div
-          className="fixed left-1/4 w-1/2 bg-white rounded-xl p-10"
+          className="absolute top-0 left-0 right-0 bottom-0 m-auto h-fit w-1/2 bg-white rounded-xl p-10"
           style={{display: (showPanel) ? undefined : 'none'}}
         >
           <CreateRSO setShowPanel={setShowPanel} />

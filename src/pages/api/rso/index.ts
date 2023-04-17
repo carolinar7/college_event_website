@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else if (adminId) {
       const rsos = await prisma.rSO.findMany({
         where: {
-          adminId: userId as string,
+          adminId: adminId as string,
         },
       });
       res.status(200).json(rsos);

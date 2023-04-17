@@ -88,7 +88,6 @@ const CreateEvent = ({ setShowPanel }: CreateEventsProps) => {
     setEventType('');
     setRSOId('');
     setTag('');
-    setImage(null);
     setDisableButton(false);
   }
 
